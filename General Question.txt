@@ -1,0 +1,140 @@
+       
+     import java.util.ArrayList;
+     import java.util.List;
+
+     public class Vehicle {
+       double cif;
+       int seatingCapacity;
+      double grossWeight;
+      int engineCapacity;
+      int age;
+      String vehicleType;
+
+    public Vehicle(String vehicleType, double cif, int seatingCapacity, double grossWeight, int engineCapacity, int age) {
+        this.cif = cif;
+        this.seatingCapacity = seatingCapacity;
+        this.grossWeight = grossWeight;
+        this.engineCapacity = engineCapacity;
+        this.age = age;
+        this.vehicleType = vehicleType;
+    }
+
+    public double calculateImportDuty() {
+        if (vehicleType.equals("Ambulance")) return 0;
+        return 0.25 * cif;
+    }
+
+    public double calculateVAT() {
+        if (vehicleType.equals("Ambulance")) return 0;
+        return 0.18 * cif;
+    }
+
+    public double calculateWithholdingTax() {
+        if (vehicleType.equals("Ambulance")) return 0;
+        return 0.06 * cif;
+    }
+
+    public double calculateInfrastructureLevy() {
+        if (vehicleType.equals("Ambulance")) {
+            return age > 10 ? 0.15 * cif : 150000;
+        } 
+          else {
+            return 150000;
+        }
+    }
+
+    public double calculateStampDuty() {
+        return 35000;
+    }
+
+    public double calculateFormFees() {
+        return 20000;
+    }
+
+    public double calculateExciseDuty() {
+        return 200000;
+    }
+
+    public double calculateRegistrationFee() {
+
+        if (vehicleType.equals("Ambulance")) {
+            return 700000;
+
+        } 
+          else if (vehicleType.equals("Estate")) {
+
+            return seatingCapacity > 5 ? 300000 : 700000;
+        } 
+            else if (vehicleType.equals("Sedan")) {
+            return 700000;
+        } 
+            else if (vehicleType.equals("SUV"))  {
+            return 300000;
+        } 
+            else if (vehicleType.equals("Trailer")) {
+             return 700000;
+        }
+        return 0;
+    }
+
+    public double calculateGrossWeightTax() {
+
+        if (vehicleType.equals("Estate")) {
+
+            if (grossWeight < 1.5) return 0.02 * cif;
+            else if (grossWeight < 2) return 0.05 * cif;
+            else return 0.10 * cif;
+        }
+        return 0;
+    }
+
+    public double calculateEngineCapacityTax() {
+        if (vehicleType.equals("Estate")) {
+            if (engineCapacity < 1800) return 0.025 * cif;
+            else return 0.05 * cif;
+        }
+        return 0;
+    }
+
+    public double calculateAgeTax() {
+        if (vehicleType.equals("Estate")) {
+            if (age < 5) return 0.01 * cif;
+            else if (age < 10) return 0.05 * cif;
+            else return 0.15 * cif;
+        }
+        return 0;
+    }
+
+    public double calculateTotalTaxes() {
+        return calculateImportDuty() + calculateVAT() + calculateWithholdingTax() + calculateInfrastructureLevy() +
+                calculateStampDuty() + calculateFormFees() + calculateExciseDuty() + calculateRegistrationFee() +
+                calculateGrossWeightTax() + calculateEngineCapacityTax() + calculateAgeTax();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Vehicle Type: %s%nCIF: %.2f%nSeating Capacity: %d%nGross Weight: %.2f tons%nEngine Capacity: %d CC%nAge: %d years",
+                vehicleType, cif, seatingCapacity, grossWeight, engineCapacity, age);
+    }
+  }
+
+     public class TaxCalculator {
+
+     public static void main(String[] args) {
+
+        List<Vehicle> vehicles = new ArrayList<>();
+
+        vehicles.add(new Vehicle("Ambulance", 2000000, 2, 1.0, 2500, 5));
+        vehicles.add(new Vehicle("Estate", 1500000, 7, 2.0, 1800, 3));
+        vehicles.add(new Vehicle("Sedan", 1000000, 5, 1.2, 1600, 8));
+        vehicles.add(new Vehicle("SUV", 2500000, 5, 6.0, 3000, 12));
+        vehicles.add(new Vehicle("Trailer", 1800000, 2, 15.0, 5000, 4));
+
+        for (Vehicle vehicle : vehicles) {
+            double totalTaxes = vehicle.calculateTotalTaxes();
+            System.out.printf("%n--- Tax Summary for %s ---%n", vehicle.vehicleType);
+            System.out.println(vehicle);
+            System.out.printf("Total Taxes Payable: %.2f UGX%n", totalTaxes);
+        }
+    }
+}
